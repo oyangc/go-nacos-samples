@@ -1,0 +1,6 @@
+spring:
+  nats:
+    urls:
+      - nats://127.0.0.1:4222
+    username: root
+    password: root

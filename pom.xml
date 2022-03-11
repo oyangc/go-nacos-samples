@@ -1,0 +1,65 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <groupId>com.oyangc</groupId>
+    <version>1.0.0</version>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>go-nacos-samples</artifactId>
+
+    <description>
+        go-nacos-samples
+    </description>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <version>1.8</version>
+                <executions>
+                    <execution>
+                        <id>build</id>
+                        <phase>compile</phase>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                        <configuration>
+                            <target>
+                                <echo message="build go file" level="info"/>
+                                <chmod file="${basedir}/src/build-go.sh" perm="ugo+rx"/>
+                                <exec executable="sh">
+                                    <arg value="${basedir}/src/build-go.sh"/>
+                                </exec>
+                                <echo message="build go success." level="info"/>
+                            </target>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                        <configuration>
+                            <tasks>
+                                <echo message="copy files" level="info"/>
+                                <copy todir="/${basedir}/target/bin/config" overwrite="true">
+                                    <fileset dir="src/main/config"/>
+                                </copy>
+                                <copy todir="/${basedir}/target/bin" overwrite="true">
+                                    <fileset file="src/main/install.sh"/>
+                                    <fileset file="src/main/run.sh"/>
+                                    <fileset file="src/main/resources/bootstrap.properties"/>
+                                </copy>
+                                <copy file="/${basedir}/src/main/go/go-nacos"
+                                      todir="/${basedir}/target/bin/" overwrite="true"/>
+                                <echo message="copy successfully!" level="info"/>
+                            </tasks>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>
